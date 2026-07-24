@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom'
+
 function Home() {
+  const navigate = useNavigate()
+
   return (
     <div>
       <header>
@@ -26,9 +30,9 @@ function Home() {
       </section>
 
       <nav>
-        <button>Citizen Login</button>
-        <button>Staff Login</button>
-        <button>Admin Login</button>
+        <button onClick={() => navigate('/citizen-login')}>Citizen Login</button>
+        <button onClick={() => navigate('/staff-login')}>Staff Login</button>
+        <button onClick={() => navigate('/admin-login')}>Admin Login</button>
       </nav>
     </div>
   )
