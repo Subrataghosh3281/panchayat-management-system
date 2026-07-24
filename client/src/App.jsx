@@ -1,10 +1,10 @@
 import './App.css'
+import Home from './pages/Home'
 
 function App() {
   return (
     <div>
-      <h1>Panchayat & Municipality Civic Issue Management System</h1>
-      <p>Welcome. This portal is under construction.</p>
+      <Home />
     </div>
   )
 }
