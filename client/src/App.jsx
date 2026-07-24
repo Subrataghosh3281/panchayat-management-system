@@ -1,5 +1,6 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import CitizenLogin from './pages/CitizenLogin'
 import StaffLogin from './pages/StaffLogin'
@@ -8,6 +9,7 @@ import AdminLogin from './pages/AdminLogin'
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/citizen-login" element={<CitizenLogin />} />
