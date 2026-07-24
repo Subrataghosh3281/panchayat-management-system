@@ -6,3 +6,5 @@ This is a full-stack MERN + CNN project I am building step by step to learn real
 
 ## Status
 🚧 Work in progress — currently in early setup phase.
+
+Built by Subrata Ghosh.
