@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const dummyComplaints = [
   { id: 'CMP1001', date: '2026-07-20', location: 'Ward 4, Main Road', problem: 'Damaged street light', status: 'Pending' },
@@ -17,6 +18,7 @@ const statusColors = {
 }
 
 function CitizenDashboard() {
+  const navigate = useNavigate()
   const [filter, setFilter] = useState('All')
 
   const filteredComplaints = filter === 'All'
@@ -41,7 +43,7 @@ function CitizenDashboard() {
       <main style={{ flex: 1, padding: '30px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2>My Complaints</h2>
-          <button style={{ padding: '10px 20px', background: '#14532d', color: 'white', border: 'none', borderRadius: '6px' }}>
+          <button onClick={() => navigate('/new-complaint')} style={{ padding: '10px 20px', background: '#14532d', color: 'white', border: 'none', borderRadius: '6px' }}>
             + New Application
           </button>
         </div>
