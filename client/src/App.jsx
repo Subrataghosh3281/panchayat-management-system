@@ -6,6 +6,7 @@ import CitizenLogin from './pages/CitizenLogin'
 import StaffLogin from './pages/StaffLogin'
 import AdminLogin from './pages/AdminLogin'
 import CitizenDashboard from './pages/CitizenDashboard'
+import StaffDashboard from './pages/StaffDashboard'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/staff-login" element={<StaffLogin />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/citizen-dashboard" element={<CitizenDashboard />} />
+        <Route path="/staff-dashboard" element={<StaffDashboard />} />
       </Routes>
     </BrowserRouter>
   )
