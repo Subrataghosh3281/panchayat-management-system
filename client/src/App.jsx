@@ -7,6 +7,7 @@ import StaffLogin from './pages/StaffLogin'
 import AdminLogin from './pages/AdminLogin'
 import CitizenDashboard from './pages/CitizenDashboard'
 import StaffDashboard from './pages/StaffDashboard'
+import AdminDashboard from './pages/AdminDashboard'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/citizen-dashboard" element={<CitizenDashboard />} />
         <Route path="/staff-dashboard" element={<StaffDashboard />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   )
