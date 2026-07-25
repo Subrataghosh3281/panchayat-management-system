@@ -5,44 +5,46 @@ body {
   color: #1a1a1a;
 }
 
-div {
+/* Styles below only apply inside elements labeled "home-page" */
+
+.home-page {
   max-width: 900px;
   margin: 0 auto;
   padding: 40px 20px;
 }
 
-header h1 {
+.home-page header h1 {
   font-size: 2rem;
   color: #14532d;
   margin-bottom: 10px;
 }
 
-header p {
+.home-page header p {
   font-size: 1.1rem;
   color: #444;
   line-height: 1.6;
 }
 
-section {
+.home-page section {
   margin-top: 30px;
   padding: 20px;
-  background: white;
+  background: rgb(241, 237, 237);
   border-radius: 8px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
-section h2 {
+.home-page section h2 {
   color: #14532d;
   margin-top: 0;
-}
+} 
 
-nav {
+.home-page nav {
   margin-top: 30px;
   display: flex;
   gap: 15px;
 }
 
-nav button {
+.home-page nav button {
   padding: 12px 24px;
   font-size: 1rem;
   border: none;
@@ -52,6 +54,6 @@ nav button {
   cursor: pointer;
 }
 
-nav button:hover {
+.home-page nav button:hover {
   background-color: #0f3d21;
-}
+}    

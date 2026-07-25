@@ -4,7 +4,7 @@ function Home() {
   const navigate = useNavigate()
 
   return (
-    <div>
+    <div className="home-page">
       <header>
         <h1>Panchayat & Municipality Civic Issue Management System</h1>
         <p>
