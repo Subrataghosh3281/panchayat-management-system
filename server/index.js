@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const jurisdictionRoutes = require('./routes/jurisdictionRoutes')
 
 const app = express()
@@ -13,6 +14,7 @@ mongoose.connect(process.env.MONGODB_URI)
 app.get('/', (req, res) => {
   res.send('Panchayat Management System backend is running.')
 })
+app.use(cors())
 app.use(express.json())
 app.use('/api/jurisdictions', jurisdictionRoutes)
 

@@ -1,38 +1,80 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-// Dummy hierarchical location data (later this will come from the database)
-const locationData = {
-  'District A': {
-    'Block 1': ['Village X', 'Village Y'],
-    'Block 2': ['Village Z'],
-  },
-  'District B': {
-    'Block 3': ['Village M', 'Village N'],
-  },
-}
+const API_BASE = 'http://localhost:5000/api/jurisdictions'
 
 function NewComplaint() {
+  const [districts, setDistricts] = useState([])
+  const [blocks, setBlocks] = useState([])
+  const [panchayats, setPanchayats] = useState([])
+  const [villages, setVillages] = useState([])
+
   const [district, setDistrict] = useState('')
   const [block, setBlock] = useState('')
+  const [panchayat, setPanchayat] = useState('')
   const [village, setVillage] = useState('')
+
   const [landmark, setLandmark] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState(null)
   const [submitted, setSubmitted] = useState(false)
 
-  const districts = Object.keys(locationData)
-  const blocks = district ? Object.keys(locationData[district]) : []
-  const villages = district && block ? locationData[district][block] : []
+  // Fetch all districts once, when the page first loads
+  useEffect(() => {
+    fetch(`${API_BASE}/districts`)
+      .then((res) => res.json())
+      .then((data) => setDistricts(data))
+      .catch((err) => console.error('Failed to load districts:', err))
+  }, [])
 
+  // When district changes, fetch its blocks
   const handleDistrictChange = (e) => {
-    setDistrict(e.target.value)
+    const districtId = e.target.value
+    setDistrict(districtId)
     setBlock('')
+    setPanchayat('')
     setVillage('')
+    setBlocks([])
+    setPanchayats([])
+    setVillages([])
+
+    if (districtId) {
+      fetch(`${API_BASE}/blocks/${districtId}`)
+        .then((res) => res.json())
+        .then((data) => setBlocks(data))
+        .catch((err) => console.error('Failed to load blocks:', err))
+    }
   }
 
+  // When block changes, fetch its panchayats
   const handleBlockChange = (e) => {
-    setBlock(e.target.value)
+    const blockId = e.target.value
+    setBlock(blockId)
+    setPanchayat('')
     setVillage('')
+    setPanchayats([])
+    setVillages([])
+
+    if (blockId) {
+      fetch(`${API_BASE}/panchayats/${blockId}`)
+        .then((res) => res.json())
+        .then((data) => setPanchayats(data))
+        .catch((err) => console.error('Failed to load panchayats:', err))
+    }
+  }
+
+  // When panchayat changes, fetch its villages
+  const handlePanchayatChange = (e) => {
+    const panchayatId = e.target.value
+    setPanchayat(panchayatId)
+    setVillage('')
+    setVillages([])
+
+    if (panchayatId) {
+      fetch(`${API_BASE}/villages/${panchayatId}`)
+        .then((res) => res.json())
+        .then((data) => setVillages(data))
+        .catch((err) => console.error('Failed to load villages:', err))
+    }
   }
 
   const handleImageChange = (e) => {
@@ -64,7 +106,7 @@ function NewComplaint() {
           <label>District</label><br />
           <select value={district} onChange={handleDistrictChange} required style={{ width: '100%', padding: '8px' }}>
             <option value="">Select District</option>
-            {districts.map(d => <option key={d} value={d}>{d}</option>)}
+            {districts.map((d) => <option key={d._id} value={d._id}>{d.name}</option>)}
           </select>
         </div>
 
@@ -72,15 +114,23 @@ function NewComplaint() {
           <label>Block</label><br />
           <select value={block} onChange={handleBlockChange} required disabled={!district} style={{ width: '100%', padding: '8px' }}>
             <option value="">Select Block</option>
-            {blocks.map(b => <option key={b} value={b}>{b}</option>)}
+            {blocks.map((b) => <option key={b._id} value={b._id}>{b.name}</option>)}
+          </select>
+        </div>
+
+        <div style={{ marginBottom: '15px' }}>
+          <label>Panchayat / Municipality</label><br />
+          <select value={panchayat} onChange={handlePanchayatChange} required disabled={!block} style={{ width: '100%', padding: '8px' }}>
+            <option value="">Select Panchayat</option>
+            {panchayats.map((p) => <option key={p._id} value={p._id}>{p.name}</option>)}
           </select>
         </div>
 
         <div style={{ marginBottom: '15px' }}>
           <label>Village / Locality</label><br />
-          <select value={village} onChange={(e) => setVillage(e.target.value)} required disabled={!block} style={{ width: '100%', padding: '8px' }}>
+          <select value={village} onChange={(e) => setVillage(e.target.value)} required disabled={!panchayat} style={{ width: '100%', padding: '8px' }}>
             <option value="">Select Village</option>
-            {villages.map(v => <option key={v} value={v}>{v}</option>)}
+            {villages.map((v) => <option key={v._id} value={v._id}>{v.name}</option>)}
           </select>
         </div>
 
