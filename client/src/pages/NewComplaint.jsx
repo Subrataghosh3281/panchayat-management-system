@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const API_BASE = 'http://localhost:5000/api/jurisdictions'
+const API_BASE = 'http://localhost:5000/api'
 
 function NewComplaint() {
   const [districts, setDistricts] = useState([])
@@ -13,20 +13,23 @@ function NewComplaint() {
   const [panchayat, setPanchayat] = useState('')
   const [village, setVillage] = useState('')
 
+  const [citizenName, setCitizenName] = useState('')
+  const [citizenContact, setCitizenContact] = useState('')
   const [landmark, setLandmark] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState(null)
-  const [submitted, setSubmitted] = useState(false)
 
-  // Fetch all districts once, when the page first loads
+  const [submitted, setSubmitted] = useState(false)
+  const [submittedId, setSubmittedId] = useState('')
+  const [error, setError] = useState('')
+
   useEffect(() => {
-    fetch(`${API_BASE}/districts`)
+    fetch(`${API_BASE}/jurisdictions/districts`)
       .then((res) => res.json())
       .then((data) => setDistricts(data))
       .catch((err) => console.error('Failed to load districts:', err))
   }, [])
 
-  // When district changes, fetch its blocks
   const handleDistrictChange = (e) => {
     const districtId = e.target.value
     setDistrict(districtId)
@@ -38,14 +41,13 @@ function NewComplaint() {
     setVillages([])
 
     if (districtId) {
-      fetch(`${API_BASE}/blocks/${districtId}`)
+      fetch(`${API_BASE}/jurisdictions/blocks/${districtId}`)
         .then((res) => res.json())
         .then((data) => setBlocks(data))
         .catch((err) => console.error('Failed to load blocks:', err))
     }
   }
 
-  // When block changes, fetch its panchayats
   const handleBlockChange = (e) => {
     const blockId = e.target.value
     setBlock(blockId)
@@ -55,14 +57,13 @@ function NewComplaint() {
     setVillages([])
 
     if (blockId) {
-      fetch(`${API_BASE}/panchayats/${blockId}`)
+      fetch(`${API_BASE}/jurisdictions/panchayats/${blockId}`)
         .then((res) => res.json())
         .then((data) => setPanchayats(data))
         .catch((err) => console.error('Failed to load panchayats:', err))
     }
   }
 
-  // When panchayat changes, fetch its villages
   const handlePanchayatChange = (e) => {
     const panchayatId = e.target.value
     setPanchayat(panchayatId)
@@ -70,7 +71,7 @@ function NewComplaint() {
     setVillages([])
 
     if (panchayatId) {
-      fetch(`${API_BASE}/villages/${panchayatId}`)
+      fetch(`${API_BASE}/jurisdictions/villages/${panchayatId}`)
         .then((res) => res.json())
         .then((data) => setVillages(data))
         .catch((err) => console.error('Failed to load villages:', err))
@@ -82,16 +83,46 @@ function NewComplaint() {
     if (file) setImage(URL.createObjectURL(file))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setError('')
+
+    try {
+      const response = await fetch(`${API_BASE}/complaints`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          citizenName,
+          citizenContact,
+          district,
+          block,
+          panchayat,
+          village,
+          landmark,
+          description,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit complaint')
+      }
+
+      const data = await response.json()
+      setSubmittedId(data.complaintId)
+      setSubmitted(true)
+    } catch (err) {
+      console.error(err)
+      setError('Something went wrong while submitting. Please try again.')
+    }
   }
 
   if (submitted) {
     return (
       <div style={{ padding: '30px' }}>
         <h2 style={{ color: '#14532d' }}>Complaint Submitted!</h2>
-        <p>Your complaint ID is <strong>CMP{Math.floor(1000 + Math.random() * 9000)}</strong>.</p>
+        <p>Your complaint ID is <strong>{submittedId}</strong>.</p>
         <p>You can track its status in your Citizen Dashboard.</p>
       </div>
     )
@@ -101,7 +132,31 @@ function NewComplaint() {
     <div style={{ padding: '30px', maxWidth: '600px' }}>
       <h2 style={{ color: '#1a1a1a' }}>Submit a New Complaint</h2>
 
+      {error && <p style={{ color: '#d9534f' }}>{error}</p>}
+
       <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '15px' }}>
+          <label>Your Name</label><br />
+          <input
+            type="text"
+            value={citizenName}
+            onChange={(e) => setCitizenName(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px' }}
+          />
+        </div>
+
+        <div style={{ marginBottom: '15px' }}>
+          <label>Contact Number</label><br />
+          <input
+            type="text"
+            value={citizenContact}
+            onChange={(e) => setCitizenContact(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px' }}
+          />
+        </div>
+
         <div style={{ marginBottom: '15px' }}>
           <label>District</label><br />
           <select value={district} onChange={handleDistrictChange} required style={{ width: '100%', padding: '8px' }}>
