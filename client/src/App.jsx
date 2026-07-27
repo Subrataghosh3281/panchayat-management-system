@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import CitizenLogin from './pages/CitizenLogin'
+import CitizenRegister from './pages/CitizenRegister'
 import StaffLogin from './pages/StaffLogin'
 import AdminLogin from './pages/AdminLogin'
 import CitizenDashboard from './pages/CitizenDashboard'
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/citizen-login" element={<CitizenLogin />} />
+        <Route path="/citizen-register" element={<CitizenRegister />} />
         <Route path="/staff-login" element={<StaffLogin />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/citizen-dashboard" element={<CitizenDashboard />} />
