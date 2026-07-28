@@ -82,16 +82,17 @@ router.post('/login', async (req, res) => {
   }
 })
 // POST - Admin creates a Staff account
-router.post('/create-staff', verifyToken, requireRole('admin'), async (req, res) => {
+router.post('/create-staff', verifyToken,requireRole('admin'),async (req, res) => {
   try {
     const { name, contact, password, district, block, panchayat } = req.body
+
 
     if (!name || !contact || !password || !district || !block || !panchayat) {
       return res.status(400).json({ error: 'Missing required fields' })
     }
 
     const existingUser = await User.findOne({ contact })
-    if (existingUser) {
+    if(existingUser) {
       return res.status(400).json({ error: 'An account with this contact already exists' })
     }
 
