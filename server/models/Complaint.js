@@ -6,6 +6,11 @@ const complaintSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  citizenId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   citizenName: {
     type: String,
     required: true,
@@ -55,6 +60,17 @@ const complaintSchema = new mongoose.Schema({
     type: String,
     enum: ['Low', 'Medium', 'High', 'Critical', null],
     default: null,
+  },
+  messages: [
+    {
+      sender: { type: String, enum: ['staff', 'citizen'], required: true },
+      text: { type: String, required: true },
+      timestamp: { type: Date, default: Date.now },
+    },
+  ],
+  rewardCredited: {
+    type: Boolean,
+    default: false,
   },
 }, {
   timestamps: true,

@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     enum: ['citizen', 'staff', 'admin'],
     default: 'citizen',
   },
+  rewardCoins: {
+    type: Number,
+    default: 0,
+  },
   district: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Jurisdiction',
